@@ -1,55 +1,63 @@
-/**
- *
- * Manipulating the DOM exercise.
- * Exercise programmatically builds navigation,
- * scrolls to anchors from navigation,
- * and highlights section in viewport upon scrolling.
- *
- * Dependencies: None
- *
- * JS Version: ES2015/ES6
- *
- * JS Standard: ESlint
- *
- */
+const navigationItems = [];
+const navbarList = document.getElementById('navbar__list');
 
-/**
- * Define Global Variables
- *
- */
+const isElementInViewPort = (el) => {
+    const rect = el.getBoundingClientRect();
+    const buffer = 200;
+    return (rect.top < window.innerHeight - buffer) && rect.bottom >= 0;
+};
 
+// also highlight current nav item
+const setNavItemActive = (section) => {
+    navigationItems.forEach(navItem => {
+        if (navItem.innerText === section.dataset.nav) {
+            navItem.classList.add('active-nav-item');
+        } else {
+            navItem.classList.remove('active-nav-item');
+        }
+    })
+};
 
-/**
- * End Global Variables
- * Start Helper Functions
- *
- */
-
-
-
-/**
- * End Helper Functions
- * Begin Main Functions
- *
- */
+// scroll listener to check, whether a nav item should be highlighted as active item
+const scrollListener = () => {
+    sections.forEach(section => {
+        if (isElementInViewPort(section)) {
+            section.classList.add('your-active-class');
+            setNavItemActive(section);
+        } else {
+            section.classList.remove('your-active-class');
+        }
+    })
+};
 
 // build the nav
+const sections = [...document.getElementsByTagName('section')];
+navigationItemNames = sections.map(element => element.dataset.nav)
 
+navigationItemNames.forEach((navigationItemName, index) => {
+    let navigationItem = document.createElement('li');
+    navigationItem.innerText = navigationItemName;
+    navigationItem.classList.add('menu__link');
+
+    if (index === 0) {
+        navigationItem.classList.add('active-nav-item');
+    }
+
+    navbarList.appendChild(navigationItem);
+    navigationItems.push(navigationItem);
+})
 
 // Add class 'active' to section when near top of viewport
-
+document.addEventListener('touchmove', scrollListener);
+document.addEventListener('scroll', scrollListener);
 
 // Scroll to anchor ID using scrollTO event
-
-
-/**
- * End Main Functions
- * Begin Events
- *
- */
-
-// Build menu
-
-// Scroll to section on link click
-
-// Set sections as active
+navigationItems.forEach(navigationItem => {
+    navigationItem.addEventListener('click', e => {
+        const clickedNavItem = e.target;
+        const sectionId = clickedNavItem.innerText.toLowerCase().replace(" ", "");
+        const sectionToScrollTo = document.getElementById(sectionId);
+        sectionToScrollTo.scrollIntoView({block: 'center', behavior: 'smooth'});
+        setNavItemActive(sectionToScrollTo);
+    })
+})
