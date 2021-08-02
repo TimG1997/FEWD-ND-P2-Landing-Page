@@ -47,7 +47,7 @@ navigationItemNames.forEach((navigationItemName, index) => {
     navigationItems.push(navigationItem);
 })
 
-// Add class 'active' to section when near top of viewport
+// Add scroll listeners (touchmove for some mobile browsers)
 document.addEventListener('touchmove', scrollListener);
 document.addEventListener('scroll', scrollListener);
 
